@@ -1,0 +1,7 @@
+{
+    "env":{
+        "MONGO_USERNAME": "gingin",
+        "MONGO_PASSWORD": "gingin",
+        "JWT_SALT": "gingin"
+    }
+}
