@@ -32,7 +32,7 @@ exports.user_singup = async(req, res, next) => {
                 email: user[0].email,
                 uid: user[0]._id
             },
-            process.env.JWT_SALT,
+            "gingin",
             {
                 expiresIn: "1h"
             },
