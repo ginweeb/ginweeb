@@ -117,7 +117,7 @@ exports.user_receipt_delete = async(req, res, next) => {
         return res.status(200).json({
             message: "Delete one",
             userID: u_id,
-            receiptId: r_i
+            receiptId: r_id
         })
     } catch (error) {
         return res.status(999).json({
@@ -131,11 +131,10 @@ exports.user_receipt_add = async(req, res, next) => {
     try {
         return res.status(201).json({
             message: "Add",
-            userID: u_id,
-            receiptId: r_i
+            userID: u_id
         })
     } catch (error) {
-        return res.status(999).json({
+        return res.status(998).json({
             error: error
         });
     }
@@ -148,7 +147,7 @@ exports.user_receipt_edit = async(req, res, next) => {
         return res.status(200).json({
             message: "Edit",
             userID: u_id,
-            receiptId: r_i
+            receiptId: r_id
         })
     } catch (error) {
         return res.status(999).json({
