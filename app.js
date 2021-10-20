@@ -21,7 +21,7 @@ app.use(express.json()); // Accept json data
 app.use(appMiddleware.app_add_headers);
 app.use('/user', userRoutes);
 app.use('/receipt', receiptRoutes);
-app.use('/areatRoutes', receiptRoutes);
+app.use('/area', areatRoutes);
 app.use(appMiddleware.app_no_route); 
 app.use(appMiddleware.app_error);
 
