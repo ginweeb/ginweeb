@@ -11,7 +11,39 @@ exports.receipt_add = async(req, res, next) => {
         await worker.load();
         await worker.loadLanguage("lit");
         await worker.initialize("lit");
-        let { data: { text } } = await worker.recognize(req.file.buffer);
+        //let { data: { text } } = await worker.recognize(req.file.buffer);
+
+        //console.log(text)
+        text = `
+V | | kV | }
+1Ą Yy į Ė 4 Ya |
+k / = | |T I
+KAXIMA LT, UAB
+Liegajus a. 10, Klaipėda, Kasa Nr. 13
+UVH nokėtašo kodas LT230335113       
+Kvitas 157/1162 800789086
+Duona DOMIPAN su sėklonis 1,35 A
+Nuolaida -0,67 A '
+Speltos kviečių Diltų DUONIUKAI
+0,85 X 3 vnt. 2.55 A
+Nuolaida sassssasto s A M j :U.?lfe
+uuummarne |
+PVK Be PVH Šu PVK
+9321;99%____„____9;32,___.____.._2:99„_,__„_____2;.42 *
+Moket1242
+Mokėta (9rynaisiais) 5,00
+Grąža (grynaisiais) 2,58
+AčIū kortelė 944000*********4404 ų
+Iš viso KAXIMOS PINIGŲ už kvitą 0,02 ų
+MAXIMOS PINIGŲ Tikutis 0,29 t
+"r'llwf_lof'ūiolmillll II
+'!!!013116u!|!,0
+AčIū, KAD PIRKOTE! |
+*Daugiau informacijos Ssužinokite
+YWw.naxima.lt arba telefonu 8 800 20050
+Kasininkas (-ė) 11713
+£7 JB 000000484395 2020 03 16 12:35:53
+        `
         console.log(req.userData.uid)
         user_id = req.userData.uid
         _id = new mongoose.Types.ObjectId()
