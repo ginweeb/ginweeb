@@ -6,12 +6,13 @@ const User = require('../models/user');
 
 exports.user_register = async(req, res, next) => {
     try {
+        const role = req.body.role;
         const email = req.body.email;
         const username = req.body.username;
         const password = req.body.password;
-        if (typeof email === 'undefined') return res.status(400).json({error: "undefined email"});
-        if (typeof username === 'undefined') return res.status(400).json({error: "undefined username"});
-        if (typeof password === 'undefined') return res.status(400).json({error: "undefined password"});
+        if (!email) return res.status(400).json({error: "undefined email"});
+        if (!username) return res.status(400).json({error: "undefined username"});
+        if (!password) return res.status(400).json({error: "undefined password"});
         const res_e = await User.find({email: email});
         const res_u = await User.find({username: username});
         if(res_e.length) return res.status(409).json({error: "email exist"});
@@ -20,7 +21,8 @@ exports.user_register = async(req, res, next) => {
             _id: new mongoose.Types.ObjectId(),
             email: email,
             username: username,
-            password: await bcrypt.hash(password, 10)
+            password: await bcrypt.hash(password, 10),
+            role: role
         })
         const new_user = await user.save();
         return res.status(201).json({response: new_user})
@@ -32,17 +34,17 @@ exports.user_singup = async(req, res, next) => {
         const email = req.body.email;
         const username = req.body.username;
         const password = req.body.password;
-        if (typeof email === 'undefined') return res.status(400).json({error: "undefined email"});
-        if (typeof username === 'undefined') return res.status(400).json({error: "undefined username"});
-        if (typeof password === 'undefined') return res.status(400).json({error: "undefined password"});
-        const user = await User.findOne({email: email, username: username});
+        if (!email) return res.status(400).json({error: "undefined email"});
+        if (!password) return res.status(400).json({error: "undefined password"});
+        const user = await User.findOne({email: email});
         if(user === null) return res.status(401).json({error: "auth failed"});
         if(!await bcrypt.compare(password, user.password)) return res.status(401).json({error: "auth failed"});
         const token = jwt.sign(
             {
                 email: user.email,
                 username: user.username,
-                uid: user._id
+                uid: user._id,
+                role: user.role
             },
             "gingin",
             {
@@ -91,18 +93,14 @@ exports.user_edit = async(req, res, next) => {
             username: username,
             password: password
         }
-        console.log(update)
-
-        /*const user = await User.findOneAndUpdate({_id: id}, {})
+        const res_e = await User.find({email: email});
+        const res_u = await User.find({username: username});
+        if(res_e.length) return res.status(409).json({error: "email exist"});
+        if(res_u.length) return res.status(409).json({error: "username exist"});
+        await User.findOneAndUpdate({_id: id}, update)
         const user = await User.findOne({_id: id}).select('-password');
         if(user === null) return res.status(401).json({error: "no user"});
-        if (typeof email === 'undefined') email = user.email;
-        if (typeof username === 'undefined') email = user.username;
-        if (typeof password === 'undefined') email = user.password;
-        else password = await bcrypt.hash(password, 10)*/
-        return res.status(200).json({
-            user: {id: id}
-        })
+        return res.status(200).json({user: user})
     } catch (error) {
         return res.status(500).json({error: error});
     }
