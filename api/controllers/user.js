@@ -84,6 +84,8 @@ exports.user_get = async(req, res, next) => {
 
 exports.user_edit = async(req, res, next) => {
     try {
+        if(req.userData.uid != req.params.userId) return res.status(409).json({error: "not your profile"});
+
         const id = req.params.userId;
         const email = req.body.email;
         const username = req.body.username;
