@@ -5,6 +5,7 @@ exports.chech_auth = (req, res, next) => {
         const token = req.headers.authorization;
         const decoded = jwt.verify(token, "gingin");
         req.userData = decoded;
+        console.log(req.userData)
         next();
     } catch (error) {
         return res.status(401).json({message: "Auth failed"});
@@ -12,7 +13,6 @@ exports.chech_auth = (req, res, next) => {
 };
 
 exports.chech_admin = (req, res, next) => {
-    console.log(req.userData)
-    if(req.userData.role != 3) return res.status(401).json({message: "Auth failed"});
+    if(req.userData.role != 0) return res.status(401).json({message: "Auth failed"});
     next();
 };

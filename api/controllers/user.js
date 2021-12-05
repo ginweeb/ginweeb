@@ -72,6 +72,15 @@ exports.user_get_all = async(req, res, next) => {
     } catch (error) {return res.status(500).json({error: error});}
 };
 
+exports.user_get_me = async(req, res, next) => {
+    try {
+        console.log("Ssssss")
+        return res.status(200).json({
+            users: req.userData
+        })
+    } catch (error) {return res.status(500).json({error: error});}
+};
+
 exports.user_get = async(req, res, next) => {
     try {
         const id = req.params.userId;
@@ -85,20 +94,19 @@ exports.user_get = async(req, res, next) => {
 exports.user_edit = async(req, res, next) => {
     try {
         if(req.userData.uid != req.params.userId) return res.status(409).json({error: "not your profile"});
-
         const id = req.params.userId;
-        const email = req.body.email;
-        const username = req.body.username;
-        const password = await bcrypt.hash(req.body.password, 10);
-        const update = {
-            email: email,
-            username: username,
-            password: password
+        var update = {}
+        if( req.body.email){
+            update.email = req.body.email
+            const res_e = await User.find({email: update.email});
+            if(res_e.length) return res.status(409).json({error: "email exist"});
         }
-        const res_e = await User.find({email: email});
-        const res_u = await User.find({username: username});
-        if(res_e.length) return res.status(409).json({error: "email exist"});
-        if(res_u.length) return res.status(409).json({error: "username exist"});
+        if( req.body.username){
+            update.username = req.body.username
+            const res_u = await User.find({username: update.username});
+            if(res_u.length) return res.status(409).json({error: "username exist"});
+        }
+        if( req.body.password) update.password = await bcrypt.hash(req.body.password, 10);
         await User.findOneAndUpdate({_id: id}, update)
         const user = await User.findOne({_id: id}).select('-password');
         if(user === null) return res.status(401).json({error: "no user"});

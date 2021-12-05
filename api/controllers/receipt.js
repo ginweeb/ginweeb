@@ -7,6 +7,7 @@ const Area = require('../models/area');
 
 exports.receipt_add = async(req, res, next) => { 
     try {
+        console.log(req.body.area)
         const worker = Tesseract.createWorker();
         await worker.load();
         await worker.loadLanguage("lit");
